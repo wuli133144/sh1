@@ -3,6 +3,16 @@
 
 #设置解析 注意：网络条件较好时，可以不用自建yum源
 # echo '10.0.0.1 mirrors.aliyuncs.com mirrors.aliyun.com repo.zabbix.com' >> /etc/hosts
+#############root check##################
+
+if [[ $UID -ne 0 ]] ;then
+    echo "must be root "
+    sleep 1
+    exit 1   
+
+fi 
+
+
 
 #安装zabbix源、aliyun YUM源
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
@@ -36,6 +46,9 @@ cp /usr/share/fonts/wqy-microhei/wqy-microhei.ttc /usr/share/fonts/dejavu/DejaVu
 #启动服务
 systemctl start zabbix-server
 systemctl start httpd
+
+sytemctl stop firedwalld
+
 
 #写入开机自启动
 chmod +x /etc/rc.d/rc.local
